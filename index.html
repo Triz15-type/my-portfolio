@@ -581,7 +581,68 @@
     <!-- Project Cards will be inserted by JS -->
   </div>
 </section>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio – Graphic Designer</title>
+  <meta name="description" content="A creative and user-friendly portfolio showcasing design projects." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    /* Custom styles for the image grid in the modal */
+    .image-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 10px;
+    }
+    .image-grid img {
+      width: 100%;
+      height: 100px;
+      object-fit: cover;
+      border-radius: 10px;
+    }
+  </style>
+</head>
+<body>
+  <section id="projects" class="max-w-7xl mx-auto px-6 pb-24">
+    <h2 class="section-title">My Projects</h2>
+    <div id="projectGrid">
+      <div class="project-card">
+        <h3>Project Title</h3>
+        <button class="btn-primary" onclick="openModal()">View Details</button>
+      </div>
+    </div>
+  </section>
 
+  <!-- Modal -->
+  <div id="projectModal" class="hidden fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
+    <div class="bg-white rounded-lg p-6">
+      <h2 class="text-2xl mb-4">Project Details</h2>
+      <div class="image-grid">
+        <!-- Example images -->
+        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+        <img src="https://via.placeholder.com/150" alt="Placeholder Image">
+      </div>
+      <button class="btn-primary mt-4" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+
+  <script>
+    function openModal() {
+      document.getElementById('projectModal').classList.remove('hidden');
+    }
+
+    function closeModal() {
+      document.getElementById('projectModal').classList.add('hidden');
+    }
+  </script>
+</body>
+</html>
 <!-- Contact Me Section Horizontal Layout -->
 <section id="contact" class="max-w-4xl mx-auto px-6 py-12 bg-white rounded-3xl shadow-lg">
   <h2 class="section-title">Contact Me</h2>
