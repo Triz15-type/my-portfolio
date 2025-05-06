@@ -1,0 +1,796 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Portfolio – Graphic Designer</title>
+  <meta name="description" content="A creative and user-friendly portfolio showcasing design projects." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      background: linear-gradient(to bottom right, #f5e8ff, #f0f8ff); /* Giữ nền gradient như phiên bản trước */
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #1f2937; /* Tailwind gray-800 */
+      min-height: 100vh;
+      margin: 0;
+      scroll-padding-top: 4rem; /* for fixed header offset */
+    }
+
+    h1, h2, h3 {
+      font-weight: 800;
+      color: #4c51bf; /* indigo-600 */
+    }
+
+    /* Section titles */
+    .section-title {
+      font-size: 1.875rem; /* text-3xl */
+      margin-bottom: 1.5rem; /* mb-6 */
+      text-align: center;
+    }
+
+    /* Projects container grid */
+    #projectGrid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit,minmax(280px,1fr));
+      gap: 2rem;
+    }
+
+    /* Project card styling với hiệu ứng tinh tế */
+    .project-card {
+      background: white;
+      border-radius: 1rem;
+      box-shadow: 0 4px 10px rgba(76,81,191,0.1);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition:
+        transform 0.4s cubic-bezier(0.55, 0.085, 0.68, 0.53),
+        box-shadow 0.4s cubic-bezier(0.55, 0.085, 0.68, 0.53),
+        filter 0.4s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+      cursor: pointer;
+      outline-offset: 4px;
+      position: relative;
+      will-change: transform, box-shadow, filter;
+    }
+    .project-card::before {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; right: 0; bottom: 0;
+      pointer-events: none;
+      border-radius: 1rem;
+      background: linear-gradient(135deg, #7c3aed 0%, #5a1ea1 100%);
+      mix-blend-mode: screen;
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      z-index: 1;
+    }
+    .project-card:hover::before,
+    .project-card:focus-visible::before {
+      opacity: 0.15;
+    }
+    .project-card:hover,
+    .project-card:focus-visible {
+      transform: translateY(-12px) scale(1.03);
+      box-shadow: 0 20px 40px rgba(76,81,191,0.18);
+      filter: drop-shadow(0 10px 15px rgba(124, 58, 193, 0.2));
+      z-index: 2;
+      outline: none; /* Bỏ đường viền khi hover */
+    }
+
+    /* Image container */
+    .project-image {
+      width: 100%;
+      height: 180px;
+      object-fit: cover;
+      transition: transform 0.6s cubic-bezier(0.55, 0.085, 0.68, 0.53);
+      will-change: transform;
+    }
+    .project-card:hover .project-image {
+      transform: scale(1.07) rotate(1deg);
+      filter: brightness(1.05);
+    }
+
+    /* Project content */
+    .project-content {
+      padding: 1.25rem;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      z-index: 3;
+      transition: color 0.3s ease;
+    }
+    .project-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+      color: #2d3748;
+      transition: color 0.3s ease;
+    }
+    .project-category {
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: #7c3aed; /* purple-700 */
+      background: #ede9fe; /* purple-100 */
+      padding: 0.25rem 0.5rem;
+      border-radius: 0.5rem;
+      align-self: flex-start;
+      margin-bottom: 0.75rem;
+      user-select: none;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .project-card:hover .project-title,
+    .project-card:focus-visible .project-title {
+      color: #5a1ea1;
+    }
+    .project-card:hover .project-category,
+    .project-card:focus-visible .project-category {
+      background: #6b46c1;
+      color: white;
+    }
+    .project-description {
+      flex-grow: 1;
+      font-size: 0.95rem;
+      color: #4a5568;
+      line-height: 1.4;
+      margin-bottom: 1rem;
+      transition: color 0.3s ease;
+    }
+    .project-card:hover .project-description,
+    .project-card:focus-visible .project-description {
+      color: #5a1ea1;
+    }
+
+    /* Nút "View Details" với gradient nền */
+    .btn-primary {
+      background: linear-gradient(135deg, #7c3aed 0%, #5a1ea1 100%);
+      color: white;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      border-radius: 9999px;
+      text-align: center;
+      box-shadow: 0 4px 12px rgba(124, 58, 193, 0.55);
+      align-self: flex-start;
+      user-select: none;
+      border: none;
+      transition:
+        background 0.4s ease,
+        box-shadow 0.4s ease,
+        transform 0.2s ease;
+      outline: none; /* Bỏ outline khi focus để tránh dày */
+    }
+    .btn-primary:hover,
+    .btn-primary:focus-visible {
+      background: linear-gradient(135deg, #9333ea 0%, #7e22ce 100%);
+      box-shadow: 0 8px 24px rgba(124, 58, 193, 0.85);
+      transform: scale(1.04);
+      outline: none;
+      outline-offset: 0;
+    }
+
+    /* Filter buttons với style nhẹ nhàng, font-weight giảm */
+    #filterButtons {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    #filterButtons button {
+      background-color: rgba(124, 58, 193, 0.1); /* màu nền tím nhẹ */
+      color: #6b46c1; /* purple-700 */
+      font-weight: 500; /* giảm độ đậm */
+      border-radius: 9999px;
+      border: none;
+      padding: 0.5rem 1.25rem;
+      cursor: pointer;
+      user-select: none;
+      transition:
+        background-color 0.3s ease,
+        color 0.3s ease,
+        box-shadow 0.3s ease;
+      box-shadow: 0 2px 6px rgba(124, 58, 193, 0.2);
+      font-style: normal;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+    #filterButtons button::after {
+      content: '';
+      position: absolute;
+      inset: -50% -50%;
+      background: linear-gradient(45deg, #6b46c1, #9f7aea);
+      transform: rotate(25deg);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      z-index: -1;
+      filter: blur(10px);
+      border-radius: 9999px;
+    }
+    #filterButtons button.active,
+    #filterButtons button:hover,
+    #filterButtons button:focus-visible {
+      background-color: #6b46c1; /* purple-700 */
+      color: white;
+      font-weight: 600;
+      box-shadow: 0 6px 20px rgba(107, 70, 193, 0.7);
+    }
+    #filterButtons button.active::after {
+      opacity: 1;
+    }
+
+    /* Modal */
+    #projectModal {
+      position: fixed;
+      z-index: 1000;
+      inset: 0;
+      background: rgba(0,0,0,0.75);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem;
+      backdrop-filter: saturate(180%) blur(6px);
+      transition: background-color 0.3s ease;
+    }
+    #projectModal.active {
+      display: flex;
+    }
+    #projectModal .modal-content {
+      background: white;
+      border-radius: 1.5rem;
+      max-width: 700px;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 30px 60px rgba(70, 34, 255, 0.4);
+      outline: none;
+      padding: 2.5rem 3rem;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(-10px);
+      animation: modalIn 0.4s forwards cubic-bezier(0.55, 0.085, 0.68, 0.53);
+    }
+
+    @keyframes modalIn {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+      from {
+        transform: translateY(10px);
+        opacity: 0;
+      }
+    }
+
+    #projectModal .modal-image {
+      width: 100%;
+      height: 350px;
+      object-fit: cover;
+      border-radius: 1rem;
+      margin-bottom: 1.25rem;
+      filter: drop-shadow(0 0 5px rgba(76,81,191,0.8));
+      transition: filter 0.3s ease;
+    }
+    #projectModal .modal-image:hover {
+      filter: drop-shadow(0 0 10px rgba(124, 58, 193, 0.8));
+      transform: scale(1.02);
+    }
+    #projectModal h3 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: #4c51bf;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+    #projectModal p {
+      font-size: 1.1rem;
+      color: #2d3748;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      user-select: text;
+    }
+    #projectModal button.close-btn {
+      background: #4c51bf;
+      border: none;
+      color: white;
+      padding: 0.6rem 2.5rem;
+      font-weight: 700;
+      border-radius: 9999px;
+      cursor: pointer;
+      align-self: center;
+      font-size: 1rem;
+      box-shadow: 0 6px 16px rgba(76,81,191,0.35);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+    #projectModal button.close-btn:hover,
+    #projectModal button.close-btn:focus-visible {
+      background-color: #4338ca;
+      box-shadow: 0 8px 22px rgba(67,56,202,0.55);
+      outline-offset: 4px;
+      outline: 2px solid #312e81;
+    }
+
+    /* Contact form styled horizontal */
+    #contactForm {
+      max-width: 800px;
+      margin: 0 auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 8px 20px rgba(76,81,191,0.15);
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.5rem 2rem;
+      align-items: center;
+      justify-content: center;
+      transition: box-shadow 0.4s ease;
+    }
+    #contactForm:hover {
+      box-shadow: 0 12px 40px rgba(107, 70, 193, 0.25);
+    }
+    #contactForm label {
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: #4c51bf;
+      display: block;
+      margin-bottom: 0.3rem;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    #contactForm .form-group {
+      flex: 1 1 250px;
+      min-width: 220px;
+      display: flex;
+      flex-direction: column;
+    }
+    #contactForm input,
+    #contactForm textarea {
+      font-size: 0.95rem;
+      border-radius: 0.75rem;
+      border: 2px solid #ede9fe;
+      outline-offset: 3px;
+      outline-color: #7c3aed;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+      resize: vertical;
+      padding: 0.5rem 0.8rem;
+      color: #1f2937;
+      font-family: inherit;
+      box-shadow: inset 0 1px 3px rgb(0 0 0 / 0.07);
+    }
+    #contactForm input:focus,
+    #contactForm textarea:focus {
+      border-color: #6b46c1;
+      box-shadow: 0 0 10px rgba(107, 70, 193, 0.4);
+    }
+    #contactForm button {
+      background-color: #4c51bf;
+      color: white;
+      font-weight: 700;
+      padding: 0.6rem 2rem;
+      border-radius: 9999px;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+      box-shadow: 0 4px 15px rgba(76,81,191,0.3);
+      transition: background-color 0.3s ease, box-shadow 0.3s ease;
+      user-select: none;
+      align-self: center;
+      margin-top: 1rem;
+      flex: 0 0 auto;
+      min-width: 160px;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      outline: none;
+    }
+    #contactForm button:hover,
+    #contactForm button:focus-visible {
+      background-color: #4338ca;
+      box-shadow: 0 6px 22px rgba(67,56,202,0.55);
+      outline-offset: 0;
+      outline: none;
+    }
+
+    #contactForm p.error-message {
+      color: #e53e3e; /* red-600 */
+      font-size: 0.85rem;
+      margin-top: 0.3rem;
+      display: none;
+    }
+    #contactForm p.error-message.visible {
+      display: block;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      #contactForm {
+        flex-direction: column;
+      }
+      #contactForm button {
+        width: 100%;
+        margin-top: 1.5rem;
+      }
+    }
+
+    @media (max-width: 480px) {
+      #projectGrid {
+        grid-template-columns: 1fr;
+      }
+      #projectModal .modal-content {
+        max-width: 95vw;
+        padding: 1rem;
+      }
+    }
+
+    /* Header as transparent nav */
+    header.site-header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 1100;
+      display: flex;
+      justify-content: center;
+      background: transparent;
+      padding: 1rem 2rem;
+      user-select: none;
+      pointer-events: auto;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    nav.navbar {
+      display: flex;
+      gap: 2.5rem;
+      background: rgba(255 255 255 / 0.75);
+      border-radius: 1.5rem;
+      box-shadow: 0 8px 30px rgb(76 81 191 / 0.15);
+      padding: 0.75rem 2rem;
+      transition: background-color 0.3s ease;
+    }
+    nav.navbar a {
+      text-decoration: none;
+      font-weight: 700;
+      color: #4c51bf;
+      font-size: 1.125rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 9999px;
+      transition: background-color 0.3s ease, color 0.3s ease;
+      user-select: none;
+      outline-offset: 4px;
+    }
+    nav.navbar a:hover,
+    nav.navbar a:focus-visible {
+      background-color: #6b46c1;
+      color: white;
+      outline: none;
+      box-shadow: 0 6px 18px rgba(107, 70, 193, 0.5);
+    }
+  </style>
+</head>
+<body>
+
+<header class="site-header" role="banner" aria-label="Primary navigation">
+  <nav class="navbar" role="navigation" aria-label="Main menu">
+    <a href="#about" tabindex="0">About Me</a>
+    <a href="#projects" tabindex="0">My Projects</a>
+    <a href="#contact" tabindex="0">Contact Me</a>
+  </nav>
+</header>
+
+<!-- Spacer for fixed header -->
+<div style="height:64px;"></div>
+
+<!-- About Me Section -->
+<section id="about" class="max-w-5xl mx-auto px-6 py-20">
+  <h2 class="section-title">About Me</h2>
+  <div class="flex flex-col md:flex-row items-center gap-12">
+    <img src="https://images.pexels.com/photos/3771113/pexels-photo-3771113.jpeg?auto=compress&cs=tinysrgb&w=600"
+      alt="Portrait of Graphic Designer" class="rounded-3xl w-72 shadow-lg object-cover" loading="lazy" />
+    <p class="text-lg max-w-xl leading-relaxed">
+      Hello! I’m a passionate graphic designer crafting intuitive and joyful interfaces.
+      With 5+ years experience, I blend creativity and purpose to build memorable, user-friendly experiences.
+      Let’s create something amazing together.
+    </p>
+  </div>
+</section>
+
+<!-- My Projects Section -->
+<section id="projects" class="max-w-7xl mx-auto px-6 pb-24">
+  <h2 class="section-title">My Projects</h2>
+
+  <!-- Filter Controls -->
+  <div id="filterButtons" role="tablist" aria-label="Filter projects by category" class="mb-12" >
+    <button class="active" aria-selected="true" role="tab" aria-controls="projectGrid" data-filter="all" tabindex="0">
+      All
+    </button>
+    <button role="tab" aria-selected="false" aria-controls="projectGrid" data-filter="branding" tabindex="-1">Branding</button>
+    <button role="tab" aria-selected="false" aria-controls="projectGrid" data-filter="ui" tabindex="-1">UI/UX</button>
+    <button role="tab" aria-selected="false" aria-controls="projectGrid" data-filter="illustration" tabindex="-1">Illustration</button>
+    <button role="tab" aria-selected="false" aria-controls="projectGrid" data-filter="web" tabindex="-1">Web Design</button>
+  </div>
+
+  <!-- Search -->
+  <div class="max-w-md mx-auto mb-10">
+    <input type="search" id="projectSearch" aria-label="Search projects by title or description" placeholder="Search projects..."
+    class="w-full px-4 py-2 rounded-xl border-2 border-purple-200 focus:ring-2 focus:ring-purple-600 focus:outline-none" />
+  </div>
+
+  <!-- Projects Grid -->
+  <div id="projectGrid" role="tabpanel" tabindex="0" aria-live="polite" aria-label="Project cards" >
+    <!-- Project Cards will be inserted by JS -->
+  </div>
+</section>
+
+<!-- Contact Me Section Horizontal Layout -->
+<section id="contact" class="max-w-4xl mx-auto px-6 py-12 bg-white rounded-3xl shadow-lg">
+  <h2 class="section-title">Contact Me</h2>
+  <form id="contactForm" novalidate aria-label="Contact form" style="display:flex; gap:1rem; flex-wrap:wrap; align-items:center; justify-content:center;">
+    <div style="flex:1 1 250px; min-width:220px; display:flex; flex-direction:column;">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" autocomplete="name" required aria-required="true" aria-describedby="nameError" />
+      <p id="nameError" class="text-red-600 text-sm hidden" role="alert">Please enter your name.</p>
+    </div>
+    <div style="flex:1 1 250px; min-width:220px; display:flex; flex-direction:column;">
+      <label for="email">Email:</label>
+      <input type="email" id="email" name="email" autocomplete="email" required aria-required="true" aria-describedby="emailError" />
+      <p id="emailError" class="text-red-600 text-sm hidden" role="alert">Please enter a valid email address.</p>
+    </div>
+    <div style="flex:2 1 500px; min-width:250px; display:flex; flex-direction:column;">
+      <label for="message">Message:</label>
+      <textarea id="message" name="message" rows="2" required aria-required="true" aria-describedby="messageError"></textarea>
+      <p id="messageError" class="text-red-600 text-sm hidden" role="alert">Please enter your message.</p>
+    </div>
+    <div style="flex:0 0 auto; display:flex; align-items:flex-end;">
+      <button type="submit" class="btn-primary" aria-label="Send message to me">Send</button>
+    </div>
+  </form>
+  <p id="formMessage" class="mt-4 text-green-600 font-semibold text-center hidden" role="alert" aria-live="polite"></p>
+</section>
+
+<!-- Project Modal -->
+<div id="projectModal" role="dialog" aria-modal="true" aria-labelledby="modalTitle" aria-describedby="modalDescription"
+  tabindex="-1" aria-hidden="true" class="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center overflow-auto p-4 hidden">
+  <div class="modal-content" tabindex="0">
+    <h3 id="modalTitle"></h3>
+    <img src="" alt="" id="modalImage" class="modal-image" />
+    <p id="modalDescription"></p>
+    <button class="close-btn" aria-label="Close project details modal">Close</button>
+  </div>
+</div>
+
+<script>
+  // ----- Data for projects -----
+  const projects = [
+    {
+      id: '1',
+      title: 'Interactive App Design',
+      category: 'ui',
+      description: 'Built to inspire self-care and wellness with an engaging, user-friendly interface.',
+      image: 'https://images.pexels.com/photos/76847/pexels-photo-76847.jpeg?auto=compress&cs=tinysrgb&w=600',
+      details: 'Detailed case study about this app design explaining process, tools, and outcome with user feedback.',
+    },
+    {
+      id: '2',
+      title: 'Brand Identity Creation',
+      category: 'branding',
+      description: 'Crafted a cohesive and memorable brand identity for a startup in the health tech space.',
+      image: 'https://images.pexels.com/photos/3184291/pexels-photo-3184291.jpeg?auto=compress&cs=tinysrgb&w=600',
+      details: 'Brand strategy, logo design, color palette, and branding guidelines developed for new client.',
+    },
+    {
+      id: '3',
+      title: 'E-commerce Website',
+      category: 'web',
+      description: 'Designed a clean and vibrant e-commerce site focused on user ease and sales conversion.',
+      image: 'https://images.pexels.com/photos/298865/pexels-photo-298865.jpeg?auto=compress&cs=tinysrgb&w=600',
+      details: 'Responsive website development with focus on checkout optimization and SEO best practices.',
+    },
+    {
+      id: '4',
+      title: 'Creative Illustrations',
+      category: 'illustration',
+      description: 'Series of vibrant illustrations for editorial and advertising use.',
+      image: 'https://images.pexels.com/photos/102127/pexels-photo-102127.jpeg?auto=compress&cs=tinysrgb&w=600',
+      details: 'Hand-drawn and digital illustration works with varied color palettes and artistic styles.',
+    },
+    {
+      id: '5',
+      title: 'Mobile UI Concept',
+      category: 'ui',
+      description: 'Conceptual mobile UI designs for a travel booking app.',
+      image: 'https://images.pexels.com/photos/833451/pexels-photo-833451.jpeg?auto=compress&cs=tinysrgb&w=600',
+      details: 'Focus on micro-interactions, smooth user flows and intuitive navigation patterns.',
+    },
+    {
+      id: '6',
+      title: 'Corporate Brochure Design',
+      category: 'branding',
+      description: 'Designed multi-page corporate brochures for annual conferences.',
+      image: 'https://images.pexels.com/photos/167682/pexels-photo-167682.jpeg?auto=compress&cs=tinysrgb&w=600',
+      details: 'Professional layouts combining photography and text for clear communication.',
+    }
+  ];
+
+  // ----- Render projects -----
+  const projectGrid = document.getElementById('projectGrid');
+
+  function createProjectCard(project) {
+    const card = document.createElement('article');
+    card.className = 'project-card';
+    card.setAttribute('tabindex', '0');
+    card.setAttribute('role', 'button');
+    card.setAttribute('aria-pressed', 'false');
+    card.dataset.category = project.category;
+    card.dataset.title = project.title;
+    card.dataset.description = project.description;
+    card.dataset.details = project.details;
+    card.dataset.image = project.image;
+
+    card.innerHTML = `
+      <img src="${project.image}" alt="${project.title} image" class="project-image" loading="lazy" />
+      <div class="project-content">
+        <div class="project-category">${project.category.charAt(0).toUpperCase() + project.category.slice(1)}</div>
+        <h3 class="project-title">${project.title}</h3>
+        <p class="project-description">${project.description}</p>
+        <button class="btn-primary" aria-label="View details for ${project.title}">View Details</button>
+      </div>
+    `;
+
+    // Click and keyboard enter/space opens modal
+    card.addEventListener('click', () => openModal(project));
+    card.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openModal(project);
+      }
+    });
+
+    return card;
+  }
+
+  function loadProjects(filter = 'all', search = '') {
+    projectGrid.innerHTML = '';
+    let filtered = projects.filter(proj => {
+      const matchesCategory = filter === 'all' || proj.category === filter;
+      const matchesSearch =
+        proj.title.toLowerCase().includes(search.toLowerCase()) ||
+        proj.description.toLowerCase().includes(search.toLowerCase());
+      return matchesCategory && matchesSearch;
+    });
+    if (filtered.length === 0) {
+      projectGrid.innerHTML = '<p class="text-center text-gray-500 italic">No projects found.</p>';
+      return;
+    }
+    filtered.forEach(proj => {
+      const card = createProjectCard(proj);
+      projectGrid.appendChild(card);
+    });
+  }
+
+  // Initial load show all
+  loadProjects();
+
+  // ----- Filtering -----
+  const filterButtons = document.querySelectorAll('#filterButtons button');
+  filterButtons.forEach(button => {
+    button.addEventListener('click', () => {
+      // Update aria-selected & active class
+      filterButtons.forEach(btn => {
+        btn.classList.remove('active');
+        btn.setAttribute('aria-selected', 'false');
+        btn.tabIndex = -1;
+      });
+      button.classList.add('active');
+      button.setAttribute('aria-selected', 'true');
+      button.tabIndex = 0;
+      button.focus();
+
+      // Reload projects with filter and current search
+      const category = button.getAttribute('data-filter');
+      const searchValue = projectSearch.value.trim();
+      loadProjects(category, searchValue);
+    });
+  });
+
+  // ----- Search -----
+  const projectSearch = document.getElementById('projectSearch');
+  projectSearch.addEventListener('input', () => {
+    const activeFilterBtn = document.querySelector('#filterButtons button.active');
+    const category = activeFilterBtn ? activeFilterBtn.getAttribute('data-filter') : 'all';
+    loadProjects(category, projectSearch.value.trim());
+  });
+
+  // ----- Modal -----
+  const modal = document.getElementById('projectModal');
+  const modalTitle = document.getElementById('modalTitle');
+  const modalImage = document.getElementById('modalImage');
+  const modalDescription = document.getElementById('modalDescription');
+  const closeBtn = modal.querySelector('.close-btn');
+
+  function openModal(project) {
+    modalTitle.textContent = project.title;
+    modalImage.src = project.image;
+    modalImage.alt = project.title + ' image';
+    modalDescription.textContent = project.details;
+    modal.classList.add('active');
+    modal.setAttribute('aria-hidden', 'false');
+    closeBtn.focus();
+  }
+
+  function closeModal() {
+    modal.classList.remove('active');
+    modal.setAttribute('aria-hidden', 'true');
+    // Return focus to last active project card
+    if (lastFocusedCard) {
+      lastFocusedCard.focus();
+    }
+  }
+
+  let lastFocusedCard = null;
+
+  projectGrid.addEventListener('click', e => {
+    if (e.target.closest('.btn-primary')) {
+      const card = e.target.closest('.project-card');
+      if(card) {
+        lastFocusedCard = card;
+      }
+    }
+  });
+
+  // Close modal handlers
+  closeBtn.addEventListener('click', closeModal);
+  modal.addEventListener('click', e => {
+    if (e.target === modal) closeModal();
+  });
+  window.addEventListener('keydown', e => {
+    if (e.key === 'Escape' && modal.classList.contains('active')) {
+      closeModal();
+    }
+  });
+
+  // ----- Contact form validation and submission -----
+  const contactForm = document.getElementById('contactForm');
+  const formMessage = document.getElementById('formMessage');
+  const nameInput = contactForm.name;
+  const emailInput = contactForm.email;
+  const messageInput = contactForm.message;
+  const nameError = document.getElementById('nameError');
+  const emailError = document.getElementById('emailError');
+  const messageError = document.getElementById('messageError');
+
+  contactForm.addEventListener('submit', (e) => {
+    e.preventDefault();
+    let valid = true;
+
+    if (!nameInput.value.trim()) {
+      nameError.classList.remove('hidden');
+      valid = false;
+    } else {
+      nameError.classList.add('hidden');
+    }
+
+    const emailRegex = /^\S+@\S+\.\S+$/;
+    if (!emailInput.value.trim() || !emailRegex.test(emailInput.value)) {
+      emailError.classList.remove('hidden');
+      valid = false;
+    } else {
+      emailError.classList.add('hidden');
+    }
+
+    if (!messageInput.value.trim()) {
+      messageError.classList.remove('hidden');
+      valid = false;
+    } else {
+      messageError.classList.add('hidden');
+    }
+
+    if (!valid) return;
+
+    formMessage.textContent = "Thank you for reaching out! I'll get back to you soon.";
+    formMessage.classList.remove('hidden');
+
+    contactForm.reset();
+    nameInput.focus();
+  });
+</script>
+</body>
+</html>
