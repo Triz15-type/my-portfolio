@@ -480,19 +480,19 @@
     }
 
     /* Header as transparent nav */
-    header.site-header {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 1100;
-      display: flex;
-      justify-content: center;
-      background: transparent;
-      padding: 1rem 2rem;
-      user-select: none;
-      pointer-events: auto;
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-    }
+   header.site-header {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 1100;
+  display: flex;
+  justify-content: center;
+  background: transparent;
+  padding: 1rem 2rem; /* Giảm giá trị padding này để làm header nhỏ hơn */
+  user-select: none;
+  pointer-events: auto;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
     nav.navbar {
       display: flex;
       gap: 2.5rem;
